@@ -1,0 +1,8 @@
+{
+    "main_gas_account_key": "94af1a2f4da3cc7d61bbe1ab573581dc6060538833453a256a7fd83adf9b7b1d",
+    "min_sleep_time_sec": 30,
+    "max_sleep_time_sec": 200,
+    "min_mint_addresses_percent": 85,
+    "max_mint_addresses_percent": 95,
+    "do_shuffle_accounts": true
+}
