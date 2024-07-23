@@ -12,6 +12,9 @@ def transfer_gas():
     rpc_url = "https://api.roninchain.com/rpc"
     web3 = Web3(Web3.HTTPProvider(rpc_url))
 
+    min_ron_gas_amount = config.get("min_ron_gas_amount")
+    max_ron_gas_amount = config.get("max_ron_gas_amount")
+
     main_gas_account_key = config.get('main_gas_account_key')
     if not main_gas_account_key:
         main_gas_account_key = input("Enter the private key for the main gas-source address: ")
@@ -31,7 +34,7 @@ def transfer_gas():
         balance = web3.eth.get_balance(address)
         balance_ether = web3.from_wei(balance, 'ether')
         print(f"Address: {address}, Balance: {balance_ether} Ether")
-        if balance > web3.to_wei(0.005, 'ether'):
+        if balance > web3.to_wei(min_ron_gas_amount, 'ether'):
             print('skip')
             continue
 
@@ -41,11 +44,11 @@ def transfer_gas():
             tx = {
                 'nonce': nonce,
                 'to': address,
-                'value': web3.to_wei(random.uniform(0.005, 0.01), 'ether'),
+                'value': web3.to_wei(random.uniform(min_ron_gas_amount, max_ron_gas_amount), 'ether'),
                 'gas': 21000,
                 'gasPrice': web3.to_wei(random.randint(20, 22), 'gwei')
             }
-            signed_tx = web3.eth.account.sign_transaction(tx, private_key=main_gas_key)
+            signed_tx = web3.eth.account.sign_transaction(tx, private_key=main_gas_account_key)
             tx_hash = web3.eth.send_raw_transaction(signed_tx.raw_transaction)
             print(f"Transaction sent: {web3.to_hex(tx_hash)}")
             nonce += 1
